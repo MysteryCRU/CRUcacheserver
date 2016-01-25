@@ -9,20 +9,18 @@ while ( i.hasNext() ) {
 	ministryId = ministry["_id"];
 	ministryCampuses = ministry["campuses"];
 
-	print("=== Evaluating ministry " + ministryId + " =========== ");
+	//print("=== Evaluating ministry " + ministryId + " =========== ");
 
 	if (ministryCampuses == 0) {
-		print("  ministry has no campuses (??)");
+		print("Ministry " + ministryId +  " has no campuses.");
 	}
 
 	for (index = 0; index < ministryCampuses.length; ++index) {
-		print("  campus [" + index + "] = " + ministryCampuses[index]);
+		print("Adding ministry " + ministryId + " to campus " + ministryCampuses[index]);
 
 		db.campus.update(
 			{ _id: ministryCampuses[index]},
 			{ $push: { ministries: ministryId } }
 		);
 	}
-
-	print("");
 }

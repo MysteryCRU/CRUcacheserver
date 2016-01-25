@@ -3,7 +3,7 @@
 
 mkdir -p JSON
 
-collections='campus events posts users ministries'
+collections='campus events posts users ministries summermissions ministryteams'
 
 echo " --- Downloading JSON ---"
 rm -rf JSON/*
