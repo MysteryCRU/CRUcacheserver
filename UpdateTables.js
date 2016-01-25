@@ -11,7 +11,7 @@ while ( i.hasNext() ) {
 
 	//print("=== Evaluating ministry " + ministryId + " =========== ");
 
-	if (ministryCampuses == 0) {
+	if (ministryCampuses.length == 0) {
 		print("Ministry " + ministryId +  " has no campuses.");
 	}
 
@@ -21,6 +21,30 @@ while ( i.hasNext() ) {
 		db.campus.update(
 			{ _id: ministryCampuses[index]},
 			{ $push: { ministries: ministryId } }
+		);
+	}
+}
+
+//
+// Add events field to ministries collection
+//
+i = db.events.find({}, {"_id": 1, "parentMinistries": 1});
+while ( i.hasNext() ) {
+	evnt = i.next();
+
+	evntId = evnt["_id"];
+	evntMinistries = evnt["parentMinistries"];
+
+	if (evntMinistries.length == 0) {
+		print("Event " + evntId +  " has no ministries.");
+	}
+
+	for (index = 0; index < evntMinistries.length; ++index) {
+		print("Adding event " + evntId + " to ministry " + evntMinistries[index]);
+
+		db.ministries.update(
+			{ _id: evntMinistries[index]},
+			{ $push: { events: evntId } }
 		);
 	}
 }
