@@ -2,49 +2,47 @@
 //
 // Add ministries field to campus collection
 //
-i = db.ministries.find({}, {"_id": 1, "campuses": 1});
-while ( i.hasNext() ) {
-	ministry = i.next();
+iterator = db.ministries.find({}, {"_id": 1, "campuses": 1});
+while ( iterator.hasNext() ) {
+    ministry = iterator.next();
 
-	ministryId = ministry["_id"];
-	ministryCampuses = ministry["campuses"];
+    ministryId = ministry["_id"];
+    ministryCampuses = ministry["campuses"];
 
-	//print("=== Evaluating ministry " + ministryId + " =========== ");
+    if (ministryCampuses.length == 0) {
+        print("Ministry " + ministryId +  " has no campuses.");
+    }
 
-	if (ministryCampuses.length == 0) {
-		print("Ministry " + ministryId +  " has no campuses.");
-	}
+    for (index = 0; index < ministryCampuses.length; ++index) {
+        print("Adding ministry " + ministryId + " to campus " + ministryCampuses[index]);
 
-	for (index = 0; index < ministryCampuses.length; ++index) {
-		print("Adding ministry " + ministryId + " to campus " + ministryCampuses[index]);
-
-		db.campus.update(
-			{ _id: ministryCampuses[index]},
-			{ $push: { ministries: ministryId } }
-		);
-	}
+        db.campus.update(
+            { _id: ministryCampuses[index]},
+            { $push: { ministries: ministryId } }
+        );
+    }
 }
 
 //
 // Add events field to ministries collection
 //
-i = db.events.find({}, {"_id": 1, "parentMinistries": 1});
-while ( i.hasNext() ) {
-	evnt = i.next();
+iterator = db.events.find({}, {"_id": 1, "parentMinistries": 1});
+while ( iterator.hasNext() ) {
+    evnt = iterator.next();
 
-	evntId = evnt["_id"];
-	evntMinistries = evnt["parentMinistries"];
+    evntId = evnt["_id"];
+    evntMinistries = evnt["parentMinistries"];
 
-	if (evntMinistries.length == 0) {
-		print("Event " + evntId +  " has no ministries.");
-	}
+    if (evntMinistries.length == 0) {
+        print("Event " + evntId +  " has no ministries.");
+    }
 
-	for (index = 0; index < evntMinistries.length; ++index) {
-		print("Adding event " + evntId + " to ministry " + evntMinistries[index]);
+    for (index = 0; index < evntMinistries.length; ++index) {
+        print("Adding event " + evntId + " to ministry " + evntMinistries[index]);
 
-		db.ministries.update(
-			{ _id: evntMinistries[index]},
-			{ $push: { events: evntId } }
-		);
-	}
+        db.ministries.update(
+            { _id: evntMinistries[index]},
+            { $push: { events: evntId } }
+        );
+    }
 }
